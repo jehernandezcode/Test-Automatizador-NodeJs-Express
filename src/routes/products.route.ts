@@ -4,30 +4,14 @@ import { productController } from "../controllers/products.controller";
 
 const router = express.Router();
 
-router.get("/", productController.getAllProducts);
+router.get("/", productController.getAll);
 
-router.post("/", (_req, res) => {
-  res.json({
-    message: "save product",
-  });
-});
+router.post("/", productController.create);
 
-router.get("/:id", (_req, res) => {
-  res.json({
-    message: "get product by id",
-  });
-});
+router.get("/:id", productController.getById);
 
-router.put("/:id", (_req, res) => {
-  res.json({
-    message: "update product by id",
-  });
-});
+router.put("/:id", productController.update);
 
-router.delete("/:id", (_req, res) => {
-  res.json({
-    message: "delete product by id",
-  });
-});
+router.delete("/:id", productController.delete);
 
 export default router;
