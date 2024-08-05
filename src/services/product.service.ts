@@ -1,39 +1,43 @@
 import { ProductDTO } from "./dto/product.dto";
-import productsData from "./products.json";
+import { ProductsModel } from "../models/product.model";
 
-const getById = (id: string): ProductDTO => {
-  const product = productsData.find((product) => product.id === id);
+const getById = async (id: string): Promise<ProductDTO> => {
+  const product = await ProductsModel.findOne<ProductDTO>({
+    _id: id,
+  });
 
   if (!product) {
     //Se puede manejar con un Global Exeption Filter
     throw new Error("Product not found");
   }
-
-  //To do - update model
   return product;
 };
 
 export const productService = {
-  getAll: (): Array<ProductDTO> => productsData as Array<ProductDTO>,
+  getAll: async () => {
+    const products = await ProductsModel.find<ProductDTO>({});
+    return products;
+  },
 
-  create: (_data: ProductDTO): void => {
+  create: async (data: ProductDTO): Promise<void> => {
+    await ProductsModel.create(data);
     return;
   },
 
-  getById: (id: string): ProductDTO => {
-    return getById(id);
+  getById: async (id: string): Promise<ProductDTO> => {
+    return await getById(id);
   },
 
-  update: (id: string, _data: ProductDTO): boolean => {
-    getById(id);
-    //To do - update model
+  update: async (id: string, data: ProductDTO): Promise<boolean> => {
+    await getById(id);
+    const updated = await ProductsModel.findOneAndUpdate({ _id: id }, data);
+    console.log(updated);
     return true;
   },
 
-  delete: (id: string): boolean => {
-    getById(id);
-
-    //To do - update model
+  delete: async (id: string): Promise<boolean> => {
+    await getById(id);
+    await ProductsModel.deleteOne({ _id: id });
     return true;
   },
 };

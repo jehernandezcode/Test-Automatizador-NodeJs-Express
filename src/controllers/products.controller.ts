@@ -3,9 +3,9 @@ import { Response, Request } from "express";
 import { productService } from "../services/product.service";
 
 export const productController = {
-  getAll: (_req: Request, res: Response) => {
+  getAll: async (_req: Request, res: Response) => {
     try {
-      const products = productService.getAll();
+      const products = await productService.getAll();
       return res.json(products);
     } catch (error: any) {
       res.status(400).json({
@@ -14,9 +14,9 @@ export const productController = {
     }
   },
 
-  create: (req: Request, res: Response) => {
+  create: async (req: Request, res: Response) => {
     try {
-      productService.create(req.body);
+      await productService.create(req.body);
       return res.sendStatus(201);
     } catch (error: any) {
       res.status(400).json({
@@ -25,10 +25,10 @@ export const productController = {
     }
   },
 
-  getById: (req: Request, res: Response) => {
+  getById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const product = productService.getById(id);
+      const product = await productService.getById(id);
       return res.json(product);
     } catch (error: any) {
       res.status(400).json({
@@ -37,11 +37,11 @@ export const productController = {
     }
   },
 
-  update: (req: Request, res: Response) => {
+  update: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       const { body } = req;
-      const isUpdated = productService.update(id, body);
+      const isUpdated = await productService.update(id, body);
       return res.json(isUpdated);
     } catch (error: any) {
       res.status(400).json({
@@ -50,10 +50,10 @@ export const productController = {
     }
   },
 
-  delete: (req: Request, res: Response) => {
+  delete: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const isDeleted = productService.delete(id);
+      const isDeleted = await productService.delete(id);
       return res.json(isDeleted);
     } catch (error: any) {
       res.status(400).json({
