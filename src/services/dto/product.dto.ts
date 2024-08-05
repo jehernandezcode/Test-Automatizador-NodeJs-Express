@@ -4,3 +4,10 @@ export interface ProductDTO {
   price: number;
   quantity: number;
 }
+
+export interface ProductMongoResponse {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
