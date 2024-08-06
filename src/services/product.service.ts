@@ -14,7 +14,7 @@ const getById = async (id: string): Promise<ProductDTO> => {
 };
 
 export const productService = {
-  getAll: async () => {
+  getAll: async (): Promise<ProductDTO[]> => {
     const products = await ProductsModel.find<ProductDTO>({});
     return products;
   },
@@ -30,8 +30,7 @@ export const productService = {
 
   update: async (id: string, data: ProductDTO): Promise<boolean> => {
     await getById(id);
-    const updated = await ProductsModel.findOneAndUpdate({ _id: id }, data);
-    console.log(updated);
+    await ProductsModel.findOneAndUpdate({ _id: id }, data);
     return true;
   },
 

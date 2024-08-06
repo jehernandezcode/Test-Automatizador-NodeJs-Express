@@ -1,9 +1,13 @@
 import { Response, Request } from "express";
 
 import { productService } from "../services/product.service";
+import { ProductDTO } from "../services/dto/product.dto";
 
 export const productController = {
-  getAll: async (_req: Request, res: Response) => {
+  getAll: async (
+    _req: Request,
+    res: Response
+  ): Promise<Response<ProductDTO[]>> => {
     try {
       const products = await productService.getAll();
       return res.json(products);
@@ -14,7 +18,7 @@ export const productController = {
     }
   },
 
-  create: async (req: Request, res: Response) => {
+  create: async (req: Request, res: Response): Promise<Response> => {
     try {
       await productService.create(req.body);
       return res.sendStatus(201);
@@ -25,7 +29,10 @@ export const productController = {
     }
   },
 
-  getById: async (req: Request, res: Response) => {
+  getById: async (
+    req: Request,
+    res: Response
+  ): Promise<Response<ProductDTO>> => {
     try {
       const { id } = req.params;
       const product = await productService.getById(id);
@@ -37,7 +44,7 @@ export const productController = {
     }
   },
 
-  update: async (req: Request, res: Response) => {
+  update: async (req: Request, res: Response): Promise<Response<boolean>> => {
     try {
       const { id } = req.params;
       const { body } = req;
@@ -50,7 +57,7 @@ export const productController = {
     }
   },
 
-  delete: async (req: Request, res: Response) => {
+  delete: async (req: Request, res: Response): Promise<Response<boolean>> => {
     try {
       const { id } = req.params;
       const isDeleted = await productService.delete(id);
