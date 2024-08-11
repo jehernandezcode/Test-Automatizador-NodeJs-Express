@@ -1,42 +1,44 @@
 import { ProductDTO } from "./dto/product.dto";
 import { ProductsModel } from "../models/product.model";
 
-const getById = async (id: string): Promise<ProductDTO> => {
-  const product = await ProductsModel.findOne<ProductDTO>({
-    _id: id,
-  });
+export class ProductService {
+  constructor() {}
 
-  if (!product) {
-    //Se puede manejar con un Global Exeption Filter
-    throw new Error("Product not found");
+  private async getByIdImpl(id: string): Promise<ProductDTO> {
+    const product = await ProductsModel.findOne<ProductDTO>({
+      _id: id,
+    });
+
+    if (!product) {
+      //Se puede manejar con un Global Exeption Filter
+      throw new Error("Product not found");
+    }
+    return product;
   }
-  return product;
-};
 
-export const productService = {
-  getAll: async (): Promise<ProductDTO[]> => {
+  async getAll(): Promise<ProductDTO[]> {
     const products = await ProductsModel.find<ProductDTO>({});
     return products;
-  },
+  }
 
-  create: async (data: ProductDTO): Promise<void> => {
+  async create(data: ProductDTO): Promise<void> {
     await ProductsModel.create(data);
     return;
-  },
+  }
 
-  getById: async (id: string): Promise<ProductDTO> => {
-    return await getById(id);
-  },
+  async getById(id: string): Promise<ProductDTO> {
+    return await this.getByIdImpl(id);
+  }
 
-  update: async (id: string, data: ProductDTO): Promise<boolean> => {
-    await getById(id);
+  async update(id: string, data: ProductDTO): Promise<boolean> {
+    await this.getByIdImpl(id);
     await ProductsModel.findOneAndUpdate({ _id: id }, data);
     return true;
-  },
+  }
 
-  delete: async (id: string): Promise<boolean> => {
-    await getById(id);
+  async delete(id: string): Promise<boolean> {
+    await this.getByIdImpl(id);
     await ProductsModel.deleteOne({ _id: id });
     return true;
-  },
-};
+  }
+}
