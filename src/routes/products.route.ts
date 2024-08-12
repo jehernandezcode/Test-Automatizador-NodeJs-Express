@@ -1,25 +1,40 @@
 import express from "express";
 
-import { productController } from "../controllers/products.controller";
-import { validateParam } from "../middlewares/joi-validations/validation-param";
+import { ProductController } from "../controllers/products.controller";
+import { ProductService } from "../services/product.service";
 import { validateBody } from "../middlewares/joi-validations/validation-body";
 import { productSchema } from "../middlewares/joi-validations/schemas/product.schema";
+import { validateParam } from "../middlewares/joi-validations/validation-param";
 
-const router = express.Router();
+const productRouter = express.Router();
+const productService = new ProductService();
+const productController = new ProductController(productService);
 
-router.get("/", productController.getAll);
+productRouter.get("/", productController.getAll.bind(productController));
 
-router.post("/", validateBody(productSchema), productController.create);
+productRouter.post(
+  "/",
+  validateBody(productSchema),
+  productController.create.bind(productController)
+);
 
-router.get("/:id", validateParam("id"), productController.getById);
+productRouter.get(
+  "/:id",
+  validateParam("id"),
+  productController.getById.bind(productController)
+);
 
-router.put(
+productRouter.put(
   "/:id",
   validateParam("id"),
   validateBody(productSchema),
-  productController.update
+  productController.update.bind(productController)
 );
 
-router.delete("/:id", validateParam("id"), productController.delete);
+productRouter.delete(
+  "/:id",
+  validateParam("id"),
+  productController.delete.bind(productController)
+);
 
-export default router;
+export default productRouter;
