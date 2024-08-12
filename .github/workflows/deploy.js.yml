@@ -1,4 +1,4 @@
-name: Run Unit Tests
+name: Deploy
 
 on:
   pull_request:
@@ -32,7 +32,7 @@ jobs:
 
   build:
     needs: test
-    runs-on: buntu-latest
+    runs-on: ubuntu-latest
     environment: dev
 
     steps:
