@@ -9,7 +9,7 @@ export class ProductController {
   async getAll(_req: Request, res: Response): Promise<Response<ProductDTO[]>> {
     try {
       const products = await this.productService?.getAll();
-      return res.json(products);
+      return res.status(200).json(products);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
@@ -32,7 +32,7 @@ export class ProductController {
     try {
       const { id } = req.params;
       const product = await this.productService?.getById(id);
-      return res.json(product);
+      return res.status(200).json(product);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
@@ -45,7 +45,7 @@ export class ProductController {
       const { id } = req.params;
       const { body } = req;
       const isUpdated = await this.productService?.update(id, body);
-      return res.json(isUpdated);
+      return res.status(200).json(isUpdated);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
@@ -56,8 +56,8 @@ export class ProductController {
   async delete(req: Request, res: Response): Promise<Response<boolean>> {
     try {
       const { id } = req.params;
-      const isDeleted = await this.productService?.delete(id);
-      return res.json(isDeleted);
+      const isDeleted = await this.productService.delete(id);
+      return res.status(200).json(isDeleted);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
