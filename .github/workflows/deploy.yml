@@ -48,7 +48,7 @@ jobs:
         run: npm install
 
       - name: Run Build
-        run: npm tsc
+        run: npm run tsc
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           PORT: ${{ secrets.PORT }}
