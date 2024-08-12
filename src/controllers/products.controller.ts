@@ -1,71 +1,67 @@
 import { Response, Request } from "express";
 
-import { productService } from "../services/product.service";
 import { ProductDTO } from "../services/dto/product.dto";
+import { IProductInterface } from "../services/interfaces/IproductService";
 
-export const productController = {
-  getAll: async (
-    _req: Request,
-    res: Response
-  ): Promise<Response<ProductDTO[]>> => {
+export class ProductController {
+  constructor(private productService?: IProductInterface) {}
+
+  async getAll(_req: Request, res: Response): Promise<Response<ProductDTO[]>> {
     try {
-      const products = await productService.getAll();
+      const products = await this.productService?.getAll();
       return res.json(products);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
       });
     }
-  },
+  }
 
-  create: async (req: Request, res: Response): Promise<Response> => {
+  async create(req: Request, res: Response): Promise<Response> {
     try {
-      await productService.create(req.body);
+      await this.productService?.create(req.body);
       return res.sendStatus(201);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
       });
     }
-  },
+  }
 
-  getById: async (
-    req: Request,
-    res: Response
-  ): Promise<Response<ProductDTO>> => {
+  async getById(req: Request, res: Response): Promise<Response<ProductDTO>> {
     try {
       const { id } = req.params;
-      const product = await productService.getById(id);
+      const product = await this.productService?.getById(id);
       return res.json(product);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
       });
     }
-  },
+  }
 
-  update: async (req: Request, res: Response): Promise<Response<boolean>> => {
+  async update(req: Request, res: Response): Promise<Response<boolean>> {
     try {
       const { id } = req.params;
       const { body } = req;
-      const isUpdated = await productService.update(id, body);
+      const isUpdated = await this.productService?.update(id, body);
       return res.json(isUpdated);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
       });
     }
-  },
+  }
 
-  delete: async (req: Request, res: Response): Promise<Response<boolean>> => {
+  async delete(req: Request, res: Response): Promise<Response<boolean>> {
     try {
       const { id } = req.params;
-      const isDeleted = await productService.delete(id);
+      const isDeleted = await this.productService?.delete(id);
       return res.json(isDeleted);
     } catch (error: any) {
       res.status(400).json({
         message: error.message,
       });
     }
-  },
-};
+  }
+}
