@@ -13,5 +13,6 @@ module.exports = {
     '!src/middlewares/**',
     '!src/middlewares/**',
     '!src/index.ts'],
-  setupFiles: ['<rootDir>/tests/setupEnv.ts'],
+  setupFiles: ['./tests/setupEnv.ts'],
+  setupFilesAfterEnv: ['./tests/setupTestDB.ts'],
 };
