@@ -1,11 +1,14 @@
 import { ProductDTO } from "./dto/product.dto";
 import { ProductsModel } from "../models/product.model";
 import { IProductInterface } from "./interfaces/IproductService";
+import { Types } from "mongoose";
 
 export class ProductService implements IProductInterface {
-  private async getByIdImpl(id: string): Promise<ProductDTO> {
-    const product = await ProductsModel.findOne<ProductDTO>({
-      _id: id,
+  constructor(private readonly productsModel: typeof ProductsModel) {}
+
+  async getByIdImpl(id: string): Promise<ProductDTO> {
+    const product = await this.productsModel.findOne<ProductDTO>({
+      _id: new Types.ObjectId(id),
     });
 
     if (!product) {
@@ -16,12 +19,12 @@ export class ProductService implements IProductInterface {
   }
 
   async getAll(): Promise<ProductDTO[]> {
-    const products = await ProductsModel.find<ProductDTO>({});
+    const products = await this.productsModel.find<ProductDTO>({});
     return products;
   }
 
   async create(data: ProductDTO): Promise<void> {
-    await ProductsModel.create(data);
+    await this.productsModel.create(data);
     return;
   }
 
@@ -31,13 +34,16 @@ export class ProductService implements IProductInterface {
 
   async update(id: string, data: ProductDTO): Promise<boolean> {
     await this.getByIdImpl(id);
-    await ProductsModel.findOneAndUpdate({ _id: id }, data);
+    await this.productsModel.findOneAndUpdate(
+      { _id: new Types.ObjectId(id) },
+      data
+    );
     return true;
   }
 
   async delete(id: string): Promise<boolean> {
     await this.getByIdImpl(id);
-    await ProductsModel.deleteOne({ _id: id });
+    await this.productsModel.deleteOne({ _id: new Types.ObjectId(id) });
     return true;
   }
 }
